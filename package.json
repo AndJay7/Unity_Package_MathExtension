@@ -1,0 +1,12 @@
+{
+  "name": "com.andsoftware.mathextension",
+  "version": "1.0.0",
+  "displayName": "& Math Extension",
+  "description": "Set of math function and classes, for easier calculation",
+  "unity": "2021.3.11",
+  "author": {
+    "name": "Andrzej Jezierski",
+    "email": "jezierski.and@gmail.com",
+    "url": ""
+  }
+}
