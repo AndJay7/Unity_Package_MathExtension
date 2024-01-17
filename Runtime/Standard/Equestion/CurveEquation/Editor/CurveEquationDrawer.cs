@@ -1,37 +1,37 @@
 using UnityEngine;
 using UnityEditor;
-using Codice.Client.BaseCommands;
 
 namespace And.Math.Standard.Editor
 {
 
     [CustomPropertyDrawer(typeof(CurveEquation))]
-    public class CurveEquationDrawer : GridDrawer
+    public class CurveEquationDrawer : PropertyGridDrawer
     {
-        protected override int RowCount => 2;
-        protected override int ColumnCount => 2;
+        protected override int RowCountStandard => 2;
+        protected override int ColumnCountStandard => 2;
+        protected override bool IsWrappingSupported => true;
+        protected override bool ForceIndent => false;
 
-        public override void OnGUI(Rect pos, SerializedProperty prop, GUIContent label)
+        protected override void DrawStandardProperties(Rect pos, SerializedProperty prop, GUIContent label, Grid grid)
         {
-            base.OnGUI(pos, prop, label);
-
             int labelWidth = 60;
-            int indent = EditorGUI.indentLevel;
-            SerializedGridProperty curve = new (prop.FindPropertyRelative(nameof(CurveEquation.curve)),labelWidth);
-            SerializedGridProperty amplitude = new(prop.FindPropertyRelative(nameof(CurveEquation.amplitude)),labelWidth);
-            SerializedGridProperty length = new(prop.FindPropertyRelative(nameof(CurveEquation.length)),labelWidth);
-
+            SerializedGridProperty curve = new(prop.FindPropertyRelative(nameof(CurveEquation.curve)), labelWidth);
+            SerializedGridProperty amplitude = new(prop.FindPropertyRelative(nameof(CurveEquation.amplitude)), labelWidth);
+            SerializedGridProperty length = new(prop.FindPropertyRelative(nameof(CurveEquation.length)), labelWidth);
 
             GridPosition gridPos;
 
             gridPos = new GridPosition(0, 0, 2);
-            curve.DrawCurve(_grid, gridPos,showLabel: false);
+            curve.DrawCurve(grid, gridPos, showLabel: false);
             gridPos = new GridPosition(0, 1);
-            amplitude.DrawFloat(_grid, gridPos);
+            amplitude.DrawFloat(grid, gridPos);
             gridPos = new GridPosition(1, 1);
-            length.DrawFloat(_grid, gridPos);
+            length.DrawFloat(grid, gridPos);
+        }
 
-            EditorGUI.indentLevel = indent;
+        protected override void DrawIndentProperties(Rect pos, SerializedProperty property, GUIContent label, Grid grid)
+        {
+            DrawStandardProperties(pos, property, label, grid);
         }
     }
 

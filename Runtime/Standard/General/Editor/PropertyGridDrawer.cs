@@ -1,46 +1,89 @@
 using UnityEditor;
 using UnityEngine;
 
-public abstract class GridDrawer : PropertyDrawer
+public abstract class PropertyGridDrawer : PropertyDrawer
 {
-    protected abstract int RowCount { get; }
-    protected abstract int ColumnCount { get; }
+    protected abstract int RowCountStandard { get; }
+    protected abstract int ColumnCountStandard { get; }
+    protected abstract bool IsWrappingSupported { get; }
+    protected abstract bool ForceIndent { get; }
+    protected virtual int RowCountWrap => RowCountStandard;
+    protected virtual int ColumnCountWrap => ColumnCountStandard;
+    private bool IsIndent => ForceIndent || IsWrapping;
+    private bool IsWrapping => IsWrappingSupported && INDENT_WIDTH >= Screen.width;
+    private int RowCount => IsWrapping ? RowCountWrap : RowCountStandard;
+    private int ColumnCount => IsWrapping ? ColumnCountWrap : ColumnCountStandard;
 
-    protected Grid _grid;
+
+    //passing height is necessary, because List Drawer is changing rect after GetPropertyHeight()
+    private float _targetHeight;
     private const float COLUMN_MARGIN = 4f;
     private const float ROW_MARGIN = 2f;
     private const float MIN_NAME_WIDTH = 120f;
-    private const float WRAP_WIDTH = 310f;
-
+    private const float INDENT_WIDTH = 331f;
+    private const float INDENT_OFFSET_X = 16f;
+    private const float INDENT_OFFSET_Y = 18f;
 
     public override void OnGUI(Rect pos, SerializedProperty property, GUIContent label)
     {
-        float nameWidth = Mathf.Max(MIN_NAME_WIDTH,pos.width * 0.45f - 28);
-        float gridHeight = pos.height;
-        float gridWidth = pos.width - nameWidth;
-
-        _grid = new Grid()
-        {
-            pivotX = pos.x + nameWidth,
-            pivotY = pos.y,
-            columnMarginSize = COLUMN_MARGIN,
-            rowMarginSize = ROW_MARGIN,
-            columnSize = (gridWidth - COLUMN_MARGIN * (ColumnCount - 1)) / ColumnCount,
-            rowSize = (gridHeight - ROW_MARGIN * (RowCount - 1)) / RowCount
-        };
-
         int indent = EditorGUI.indentLevel;
+        label = EditorGUI.BeginProperty(pos, label, property);
 
-        EditorGUI.LabelField(new Rect(pos.x, pos.y, nameWidth, _grid.rowSize), property.displayName);
+        EditorGUI.PrefixLabel(pos, label);
 
+        Grid grid;
+        if (IsIndent)
+        {
+            grid = GetGrid(pos, INDENT_OFFSET_X, INDENT_OFFSET_Y, _targetHeight);
+            DrawIndentProperties(pos, property, label, grid);
+        }
+        else
+        {
+            grid = GetGrid(pos, GetPrefixWidth(pos), 0, _targetHeight);
+            DrawStandardProperties(pos, property, label, grid);
+        }
+
+        EditorGUI.EndProperty();
         EditorGUI.indentLevel = indent;
     }
 
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
         float rowSize = base.GetPropertyHeight(property, label);
+        int rowCount = RowCount + (IsIndent ? 1 : 0);
+        _targetHeight = Grid.GetSpanSize(rowSize, ROW_MARGIN, rowCount);
+        return _targetHeight;
+    }
 
-        return Grid.GetSpanSize(rowSize,ROW_MARGIN,RowCount);
+    protected virtual void DrawStandardProperties(Rect pos, SerializedProperty property, GUIContent label, Grid grid) { }
+
+    protected virtual void DrawIndentProperties(Rect pos, SerializedProperty property, GUIContent label, Grid grid) { }
+
+    private Grid GetGrid(Rect pos, float offsetX, float offsetY, float height)
+    {
+        float spacingY = (pos.height - height) / 2;
+        float pivotX = pos.x + offsetX;
+        float pivotY = pos.y + offsetY;
+        float gridWidth = pos.width - offsetX;
+        float gridHeight = height - offsetY;
+
+        Grid grid = new Grid()
+        {
+            spacingY = spacingY,
+            pivotX = pivotX,
+            pivotY = pivotY,
+            columnMarginSize = COLUMN_MARGIN,
+            rowMarginSize = ROW_MARGIN,
+            columnSize = (gridWidth - COLUMN_MARGIN * (ColumnCount - 1)) / ColumnCount,
+            rowSize = (gridHeight - ROW_MARGIN * (RowCount - 1)) / RowCount
+        };
+
+        return grid;
+    }
+
+    private float GetPrefixWidth(Rect pos)
+    {
+        return Mathf.Max(MIN_NAME_WIDTH, pos.width * 0.45f - 28);
     }
 }
 
@@ -124,6 +167,7 @@ public struct GridPosition
 
 public struct Grid
 {
+    public float spacingY;
     public float pivotX;
     public float pivotY;
     public float rowSize;
@@ -141,7 +185,7 @@ public struct Grid
 
     public float GetPosY(GridPosition gridPos)
     {
-        float posY = pivotY + GetSpanSize(rowSize, rowMarginSize, gridPos.rowIndex);
+        float posY = pivotY + spacingY + GetSpanSize(rowSize, rowMarginSize, gridPos.rowIndex);
         if (gridPos.rowIndex > 0)
             posY += rowMarginSize;
         return posY;

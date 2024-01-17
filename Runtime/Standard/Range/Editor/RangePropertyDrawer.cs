@@ -5,27 +5,30 @@ namespace And.Math.Standard.Editor
 {
 
     [CustomPropertyDrawer(typeof(Range))]
-    public class RangePropertyDrawer : GridDrawer
+    public class RangePropertyDrawer : PropertyGridDrawer
     {
-        protected override int RowCount => 1;
-        protected override int ColumnCount => 3; 
+        protected override int ColumnCountWrap => ColumnCountStandard - 1;
+        protected override int RowCountStandard => 1;
+        protected override int ColumnCountStandard => 3;
+        protected override bool IsWrappingSupported => true;
+        protected override bool ForceIndent => false;
 
-        public override void OnGUI(Rect pos, SerializedProperty prop, GUIContent label)
+        protected override void DrawStandardProperties(Rect pos, SerializedProperty prop, GUIContent label, Grid grid)
         {
-            base.OnGUI(pos, prop, label);
-
             int labelWidth = 28;
-            int indent = EditorGUI.indentLevel;
             SerializedGridProperty min = new SerializedGridProperty(prop.FindPropertyRelative(nameof(Range.min)), labelWidth);
             SerializedGridProperty max = new SerializedGridProperty(prop.FindPropertyRelative(nameof(Range.max)), labelWidth);
             GridPosition gridPos;
 
             gridPos = new GridPosition(0, 0);
-            min.DrawFloat(_grid, gridPos);
+            min.DrawFloat(grid, gridPos);
             gridPos = new GridPosition(1, 0);
-            max.DrawFloat(_grid, gridPos);
+            max.DrawFloat(grid, gridPos);
+        }
 
-            EditorGUI.indentLevel = indent;
+        protected override void DrawIndentProperties(Rect pos, SerializedProperty property, GUIContent label, Grid grid)
+        {
+            DrawStandardProperties(pos, property, label, grid);
         }
     }
 
