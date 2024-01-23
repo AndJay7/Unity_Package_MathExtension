@@ -8,8 +8,5 @@
     "name": "Andrzej Jezierski",
     "email": "jezierski.and@gmail.com",
     "url": ""
-  },
-  "dependencies": {
-    "com.andsoftware.editorextension": "https://github.com/AndJay7/Unity_Package_EditorExtension.git"
   }
 }
