@@ -8,5 +8,9 @@
     "name": "Andrzej Jezierski",
     "email": "jezierski.and@gmail.com",
     "url": ""
+  },
+  "dependencies": {
+    "com.andsoftware.editorextension": "1.0.0"
   }
+}
 }
