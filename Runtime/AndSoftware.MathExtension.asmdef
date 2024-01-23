@@ -1,0 +1,16 @@
+{
+    "name": "AndSoftware.MathExtension",
+    "rootNamespace": "",
+    "references": [
+        "GUID:a3bcb3fc24a5a0446a081c31d11b843c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
