@@ -2,14 +2,11 @@
   "name": "com.andsoftware.mathextension",
   "version": "1.0.0",
   "displayName": "& Math Extension",
-  "description": "Set of math function and classes, for easier calculation",
+  "description": "Set of math function and classes, for easier calculation. Requires also https://github.com/AndJay7/Unity_Package_EditorExtension.git.",
   "unity": "2021.3",
   "author": {
     "name": "Andrzej Jezierski",
     "email": "jezierski.and@gmail.com",
     "url": ""
-  },
-  "dependencies": {
-    "com.andsoftware.editorextension": "https://github.com/AndJay7/Unity_Package_EditorExtension.git"
   }
 }
