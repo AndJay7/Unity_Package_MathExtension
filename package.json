@@ -10,6 +10,6 @@
     "url": ""
   },
   "dependencies": {
-    "com.andsoftware.editorextension": "1.0.0"
+    "com.andsoftware.editorextension": "https://github.com/AndJay7/Unity_Package_EditorExtension.git"
   }
 }
