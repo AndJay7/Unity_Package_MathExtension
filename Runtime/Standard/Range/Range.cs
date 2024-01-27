@@ -36,7 +36,7 @@ namespace And.Math.Standard
             return value;
         }
 
-        public float Evaluate(float t, bool clamped = false)
+        public float Lerp(float t, bool clamped = false)
         {
             if (clamped)
                 t = Clamp(t, 0, 1);

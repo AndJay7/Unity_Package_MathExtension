@@ -27,11 +27,11 @@ namespace And.Math.Standard.Editor
             GridPosition gridPos;
 
             gridPos = new GridPosition(new Vector2Int(0, 0), new Vector2Int(2, 1));
-            curve.DrawCurve(grid, gridPos, showLabel: false);
+            curve.DrawProperty(grid, gridPos, showLabel: false);
             gridPos = new GridPosition(new Vector2Int(0, 1));
-            amplitude.DrawFloat(grid, gridPos, showLabel: true);
+            amplitude.DrawProperty(grid, gridPos, showLabel: true);
             gridPos = new GridPosition(new Vector2Int(1, 1));
-            length.DrawFloat(grid, gridPos, showLabel: true);
+            length.DrawProperty(grid, gridPos, showLabel: true);
         }
     }
 

@@ -53,7 +53,7 @@ namespace And.Math.Standard
         {
             float output = value;
             output = inMinMax.Remap01(output);
-            output = outMinMax.Evaluate(output);
+            output = outMinMax.Lerp(output);
             return output;
         }
 

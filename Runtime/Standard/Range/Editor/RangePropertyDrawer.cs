@@ -40,9 +40,9 @@ namespace And.Math.Standard.Editor
             GridPosition gridPos;
 
             gridPos = new GridPosition(new Vector2Int(0, startRow), new Vector2Int(1,1));
-            min.DrawFloat(grid, gridPos,showLabel: true);
+            min.DrawProperty(grid, gridPos,showLabel: true);
             gridPos = new GridPosition(new Vector2Int(1, startRow));
-            max.DrawFloat(grid, gridPos, showLabel: true);
+            max.DrawProperty(grid, gridPos, showLabel: true);
         }
     }
 
